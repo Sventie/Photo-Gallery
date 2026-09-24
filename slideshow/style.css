@@ -5,16 +5,29 @@
    ========================================================================== */
 
 :root {
-  --slideshow-max-width: 1600px;
+  --slideshow-max-width: 900px;
   --slideshow-gap: 16px;
-  --slideshow-image-height: clamp(320px, 78vh, 900px);
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
 }
 
 body {
   background-color: #fafafa;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  overflow: hidden; /* Die gesamte Seite soll nie scrollen muessen */
+}
+
+/* Auf der Einstellungen-Seite ist Scrollen dagegen erlaubt (kurzer Inhalt,
+   aber z.B. auf kleinen Handy-Bildschirmen soll nichts abgeschnitten werden). */
+body.settings-page {
+  height: auto;
+  min-height: 100%;
+  overflow: auto;
 }
 
 /* ---- Passwort-Overlay -------------------------------------------------- */
@@ -51,12 +64,25 @@ body {
   display: block;
 }
 
-/* ---- Haupt-App ---------------------------------------------------------- */
+/* ---- Einstellungen-Seite -------------------------------------------------- */
+
+.save-confirmation {
+  display: none;
+  color: #00897b;
+  margin-left: 12px;
+}
+
+.save-confirmation.visible {
+  display: inline;
+}
+
+/* ---- Haupt-App: fuellt immer genau den sichtbaren Viewport -------------- */
 
 #app {
   display: flex;
   flex-direction: column;
-  flex: 1;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .page-counter {
@@ -69,62 +95,91 @@ body {
 .autoplay-progress-track {
   height: 4px;
   width: 100%;
+  flex-shrink: 0;
   background: rgba(255, 255, 255, 0.25);
 }
 
 .autoplay-progress-bar {
   height: 100%;
   width: 0%;
-  background: #ffffff;
+  background: #9e9e9e; /* Grau statt Weiss, damit der Balken auf der Teal-Leiste besser sichtbar ist */
 }
 
-main.container {
+#app main.container {
   max-width: var(--slideshow-max-width);
-  width: 96%;
+  width: 94%;
   flex: 1;
+  min-height: 0;
+  display: flex;
   padding-top: 16px;
   padding-bottom: 16px;
 }
 
-.slide-container {
-  min-height: 300px;
+#app .slide-container {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  width: 100%;
 }
 
-.slide-text {
-  padding: 16px 24px;
+#app .card {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
 }
 
-.slide-title {
+/* Bild-Bereich einer Seite: nimmt den kompletten uebrigen Platz der Karte ein */
+#app .card > div:first-child {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+#app .slide-text {
+  flex-shrink: 0;
+  max-height: 22vh;
+  overflow-y: auto;
+  padding: 12px 24px;
+}
+
+#app .slide-title {
   margin-top: 0;
 }
 
 /* ---- Layout: single ------------------------------------------------------ */
 
+.layout-single {
+  height: 100%;
+}
+
 .layout-single img {
   width: 100%;
-  height: var(--slideshow-image-height);
+  height: 100%;
   object-fit: cover;
   border-radius: 4px 4px 0 0;
 }
 
 /* ---- Layout: grid --------------------------------------------------------- */
 
-.layout-grid {
+#app .layout-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 1fr;
   gap: var(--slideshow-gap);
   padding: var(--slideshow-gap);
+  height: 100%;
 }
 
 .layout-grid img {
   width: 100%;
-  height: 45vh;
+  height: 100%;
   object-fit: cover;
   border-radius: 4px;
 }
 
 @media (max-width: 600px) {
-  .layout-grid {
+  #app .layout-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
@@ -133,12 +188,13 @@ main.container {
 
 .layout-carousel {
   position: relative;
+  height: 100%;
 }
 
 .carousel-viewport {
   position: relative;
   width: 100%;
-  height: var(--slideshow-image-height);
+  height: 100%;
   overflow: hidden;
   border-radius: 4px 4px 0 0;
   background: #eceff1;
@@ -190,9 +246,54 @@ main.container {
 /* ---- Steuerleiste ---------------------------------------------------------- */
 
 .controls {
+  flex-shrink: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 24px;
-  padding: 16px 0 32px;
+  padding: 12px 0 20px;
+}
+
+/* ---- Praesentations-/Vollbildmodus der Website ---------------------------- */
+/* Zeigt nur noch Bild(er) + Text, randfuellend, ohne jede Navigation.        */
+
+#app.presentation-mode nav,
+#app.presentation-mode .controls,
+#app.presentation-mode .carousel-arrow,
+#app.presentation-mode .carousel-dots {
+  display: none;
+}
+
+#app.presentation-mode main.container {
+  max-width: none;
+  width: 100%;
+  padding: 0;
+}
+
+#app.presentation-mode .card {
+  border-radius: 0;
+  box-shadow: none;
+}
+
+#app.presentation-mode .slide-text {
+  max-height: 30vh;
+}
+
+#exit-presentation-btn {
+  display: none;
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 500;
+  opacity: 0.35;
+  transition: opacity 0.2s;
+}
+
+#exit-presentation-btn:hover,
+#exit-presentation-btn:focus {
+  opacity: 1;
+}
+
+#app.presentation-mode + #exit-presentation-btn {
+  display: inline-flex;
 }

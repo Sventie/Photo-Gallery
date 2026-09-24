@@ -2,9 +2,22 @@
 // Konfiguration - hier kannst du Timing und Passwort anpassen.
 // ============================================================================
 
-const PAGE_DURATION_MS = 5000; // Auto-Play: Anzeigedauer pro Seite
+const DEFAULT_PAGE_DURATION_MS = 5000; // Auto-Play: Anzeigedauer pro Seite, falls nichts in den Einstellungen gespeichert ist
 const SITE_PASSWORD = 'aendere-mich'; // Passwort fuer den client-seitigen Zugriffsschutz
 const PASSWORD_STORAGE_KEY = 'slideshow-unlocked';
+const DURATION_STORAGE_KEY = 'slideshow-duration-seconds'; // wird auch von settings.html genutzt
+
+let PAGE_DURATION_MS = readPageDurationMs();
+
+function readPageDurationMs() {
+  try {
+    const stored = parseFloat(localStorage.getItem(DURATION_STORAGE_KEY));
+    if (!isNaN(stored) && stored > 0) return stored * 1000;
+  } catch (e) {
+    // localStorage evtl. nicht verfuegbar - dann bleibt es beim Standardwert
+  }
+  return DEFAULT_PAGE_DURATION_MS;
+}
 
 const KNOWN_LAYOUTS = ['single', 'grid', 'carousel'];
 const DEFAULT_LAYOUT = 'single';
@@ -278,6 +291,7 @@ function startProgressBarAnimation() {
 
 function startAutoPlay() {
   isAutoPlaying = true;
+  PAGE_DURATION_MS = readPageDurationMs(); // ggf. seit Seitenaufruf in den Einstellungen geaendert
   document.querySelector('#play-pause-btn i').textContent = 'pause';
   startProgressBarAnimation();
   autoPlayTimer = setInterval(() => {
@@ -305,6 +319,36 @@ function toggleAutoPlay() {
 }
 
 // ============================================================================
+// Praesentations-/Vollbildmodus
+// ============================================================================
+// Blendet Navigation und Steuerung komplett aus, zeigt nur Bild(er) + Text
+// randfuellend. Gedacht fuer den Einsatz bei einer Veranstaltung, kombiniert
+// mit dem Browser-eigenen Vollbildmodus (F11). Verlassen nur ueber Esc oder
+// den dezenten Button oben rechts - Navigation ist im Modus nicht noetig,
+// da das Auto-Play automatisch startet.
+
+let isPresentationMode = false;
+
+function enterPresentationMode() {
+  isPresentationMode = true;
+  document.getElementById('app').classList.add('presentation-mode');
+  if (!isAutoPlaying) startAutoPlay();
+}
+
+function exitPresentationMode() {
+  isPresentationMode = false;
+  document.getElementById('app').classList.remove('presentation-mode');
+}
+
+function togglePresentationMode() {
+  if (isPresentationMode) {
+    exitPresentationMode();
+  } else {
+    enterPresentationMode();
+  }
+}
+
+// ============================================================================
 // Initialisierung
 // ============================================================================
 
@@ -318,8 +362,16 @@ async function init() {
     goToNextPage();
   });
   document.getElementById('play-pause-btn').addEventListener('click', toggleAutoPlay);
+  document.getElementById('fullscreen-btn').addEventListener('click', enterPresentationMode);
+  document.getElementById('exit-presentation-btn').addEventListener('click', exitPresentationMode);
 
   document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && isPresentationMode) {
+      exitPresentationMode();
+      return;
+    }
+    if (isPresentationMode) return; // im Praesentationsmodus keine manuelle Navigation
+
     if (e.key === 'ArrowRight') {
       stopAutoPlay();
       goToNextPage();

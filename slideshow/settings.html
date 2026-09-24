@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Einstellungen – Slideshow</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="settings-page">
+
+  <nav class="teal">
+    <div class="nav-wrapper container">
+      <a href="index.html" class="brand-logo">
+        <i class="material-icons" style="vertical-align: middle;">arrow_back</i>
+        Einstellungen
+      </a>
+    </div>
+  </nav>
+
+  <main class="container" style="max-width: 500px; padding-top: 32px; padding-bottom: 32px;">
+    <div class="card">
+      <div style="padding: 24px;">
+        <h5>Anzeigedauer</h5>
+        <p>Wie lange soll jede Seite im Auto-Play-Modus angezeigt werden, bevor automatisch zur naechsten gewechselt wird?</p>
+
+        <div class="input-field">
+          <input id="duration-input" type="number" min="1" step="0.5">
+          <label for="duration-input" class="active">Anzeigedauer pro Seite (Sekunden)</label>
+        </div>
+
+        <button id="save-btn" class="btn waves-effect waves-light teal">
+          Speichern
+          <i class="material-icons right">save</i>
+        </button>
+        <span id="save-confirmation" class="save-confirmation">Gespeichert!</span>
+      </div>
+    </div>
+
+    <a href="index.html" class="btn-flat waves-effect">
+      <i class="material-icons left">arrow_back</i>
+      Zurueck zur Slideshow
+    </a>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script>
+    const DURATION_STORAGE_KEY = 'slideshow-duration-seconds';
+    const DEFAULT_DURATION_SECONDS = 5;
+
+    const input = document.getElementById('duration-input');
+    const saveBtn = document.getElementById('save-btn');
+    const confirmation = document.getElementById('save-confirmation');
+
+    let storedValue = DEFAULT_DURATION_SECONDS;
+    try {
+      const parsed = parseFloat(localStorage.getItem(DURATION_STORAGE_KEY));
+      if (!isNaN(parsed) && parsed > 0) storedValue = parsed;
+    } catch (e) {
+      // localStorage evtl. nicht verfuegbar - dann bleibt es beim Standardwert
+    }
+    input.value = storedValue;
+
+    saveBtn.addEventListener('click', () => {
+      const value = parseFloat(input.value);
+      if (isNaN(value) || value <= 0) return;
+      try {
+        localStorage.setItem(DURATION_STORAGE_KEY, String(value));
+      } catch (e) {
+        // localStorage evtl. nicht verfuegbar - Wert gilt dann nur fuer diese Sitzung
+      }
+      confirmation.classList.add('visible');
+      setTimeout(() => confirmation.classList.remove('visible'), 2000);
+    });
+  </script>
+</body>
+</html>

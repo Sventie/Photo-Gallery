@@ -59,6 +59,24 @@ weiter anpassen kannst.
 Ein unbekannter oder fehlender `layout`-Wert blockiert die Slideshow nicht:
 die Seite fällt automatisch auf ein sinnvolles Standard-Layout zurück.
 
+## Anzeigedauer einstellen
+
+Über das Zahnrad-Symbol in der Steuerleiste gelangst du zur Einstellungen-Seite
+(`settings.html`). Dort kannst du festlegen, wie viele Sekunden jede Seite im
+Auto-Play-Modus angezeigt wird, bevor automatisch weitergeblättert wird. Die
+Einstellung wird im Browser gespeichert (localStorage) und gilt ab dem
+nächsten Start des Auto-Plays — ein Reload der Slideshow-Seite reicht.
+
+## Präsentations-/Vollbildmodus
+
+Über das Vollbild-Symbol in der Steuerleiste startet ein Präsentationsmodus:
+Navigation, Steuerleiste und Seitenzähler werden ausgeblendet, Bild(er) und
+Text füllen den kompletten Bildschirm randlos aus, und der Auto-Play startet
+automatisch. In diesem Modus ist absichtlich keine manuelle Navigation
+möglich — gedacht ist er für den Einsatz bei einer Veranstaltung, kombiniert
+mit dem Browser-eigenen Vollbildmodus (F11). Verlassen geht per `Esc`-Taste
+oder über den dezenten Button oben rechts.
+
 ## Lokal testen
 
 Im `slideshow/`-Ordner:
