@@ -1,0 +1,6 @@
+{
+  "title": "Tiere im Dorf",
+  "text": "Dieses Beispiel zeigt das Layout \"grid\": alle Bilder aus der images-Liste werden nebeneinander im Raster angezeigt (bricht auf dem Handy in weniger Spalten um).",
+  "layout": "grid",
+  "images": ["hund.jpg", "katze.jpg", "vogel.jpg", "pferd.jpg"]
+}

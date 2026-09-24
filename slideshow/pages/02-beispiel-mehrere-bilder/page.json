@@ -1,0 +1,6 @@
+{
+  "title": "Ausflug in die Berge",
+  "text": "Drei Bilder von einem Tag: Berg, See und Wald. Dieses Beispiel zeigt das Layout \"carousel\": die Bilder lassen sich innerhalb der Seite mit Pfeilen/Punkten durchblättern, unabhängig von der Seiten-Navigation.",
+  "layout": "carousel",
+  "images": ["berg.jpg", "see.jpg", "wald.jpg"]
+}
