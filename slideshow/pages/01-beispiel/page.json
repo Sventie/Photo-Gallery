@@ -1,0 +1,6 @@
+{
+  "title": "Ankunft",
+  "text": "Erster Tag am Strand, kurz vor Sonnenuntergang. Dieses Beispiel zeigt das Layout \"single\": nur das erste Bild aus der images-Liste wird groß angezeigt.",
+  "layout": "single",
+  "images": ["strand.jpg"]
+}

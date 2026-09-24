@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Foto-Slideshow</title>
+
+  <!-- Materialize CSS (Material-Design-Komponenten per CDN, kein Build-Tool noetig) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <!-- Material Icons -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Passwort-Overlay: kein echter Schutz, nur eine leichte Huerde (siehe README) -->
+  <div id="password-overlay">
+    <div class="password-card">
+      <h5>Geschuetzter Bereich</h5>
+      <p>Bitte Passwort eingeben, um die Slideshow zu sehen.</p>
+      <div class="input-field">
+        <input id="password-input" type="password" autocomplete="off">
+        <label for="password-input">Passwort</label>
+      </div>
+      <button id="password-submit" class="btn waves-effect waves-light">
+        Weiter
+        <i class="material-icons right">arrow_forward</i>
+      </button>
+      <p id="password-error" class="password-error">Falsches Passwort, bitte erneut versuchen.</p>
+    </div>
+  </div>
+
+  <!-- Haupt-App, bleibt bis zur erfolgreichen Passworteingabe versteckt -->
+  <div id="app" hidden>
+    <nav class="teal">
+      <div class="nav-wrapper container">
+        <a href="#" class="brand-logo">Slideshow</a>
+        <span id="page-counter" class="page-counter">– / –</span>
+      </div>
+    </nav>
+
+    <main class="container">
+      <div id="slide-container" class="slide-container">
+        <!-- Wird von script.js befuellt -->
+      </div>
+    </main>
+
+    <div class="controls">
+      <button id="prev-btn" class="btn-floating btn-large waves-effect waves-light teal" title="Vorherige Seite">
+        <i class="material-icons">chevron_left</i>
+      </button>
+      <button id="play-pause-btn" class="btn-floating btn-large waves-effect waves-light teal" title="Auto-Play starten/stoppen">
+        <i class="material-icons">play_arrow</i>
+      </button>
+      <button id="next-btn" class="btn-floating btn-large waves-effect waves-light teal" title="Naechste Seite">
+        <i class="material-icons">chevron_right</i>
+      </button>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
