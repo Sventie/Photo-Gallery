@@ -262,15 +262,34 @@ function goToPrevPage() {
 // Auto-Play
 // ============================================================================
 
+function resetProgressBar() {
+  const bar = document.getElementById('autoplay-progress-bar');
+  bar.style.transition = 'none';
+  bar.style.width = '0%';
+}
+
+function startProgressBarAnimation() {
+  const bar = document.getElementById('autoplay-progress-bar');
+  resetProgressBar();
+  void bar.offsetWidth; // Reflow erzwingen, damit die Transition sauber neu startet
+  bar.style.transition = `width ${PAGE_DURATION_MS}ms linear`;
+  bar.style.width = '100%';
+}
+
 function startAutoPlay() {
   isAutoPlaying = true;
   document.querySelector('#play-pause-btn i').textContent = 'pause';
-  autoPlayTimer = setInterval(goToNextPage, PAGE_DURATION_MS);
+  startProgressBarAnimation();
+  autoPlayTimer = setInterval(() => {
+    goToNextPage();
+    startProgressBarAnimation();
+  }, PAGE_DURATION_MS);
 }
 
 function stopAutoPlay() {
   isAutoPlaying = false;
   document.querySelector('#play-pause-btn i').textContent = 'play_arrow';
+  resetProgressBar();
   if (autoPlayTimer) {
     clearInterval(autoPlayTimer);
     autoPlayTimer = null;

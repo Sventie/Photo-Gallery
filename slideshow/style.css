@@ -5,8 +5,9 @@
    ========================================================================== */
 
 :root {
-  --slideshow-max-width: 900px;
+  --slideshow-max-width: 1600px;
   --slideshow-gap: 16px;
+  --slideshow-image-height: clamp(320px, 78vh, 900px);
 }
 
 body {
@@ -63,11 +64,26 @@ body {
   font-size: 1rem;
 }
 
+/* ---- Auto-Play-Fortschrittsbalken ---------------------------------------- */
+
+.autoplay-progress-track {
+  height: 4px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.autoplay-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: #ffffff;
+}
+
 main.container {
   max-width: var(--slideshow-max-width);
+  width: 96%;
   flex: 1;
-  padding-top: 24px;
-  padding-bottom: 24px;
+  padding-top: 16px;
+  padding-bottom: 16px;
 }
 
 .slide-container {
@@ -86,7 +102,7 @@ main.container {
 
 .layout-single img {
   width: 100%;
-  max-height: 60vh;
+  height: var(--slideshow-image-height);
   object-fit: cover;
   border-radius: 4px 4px 0 0;
 }
@@ -102,7 +118,7 @@ main.container {
 
 .layout-grid img {
   width: 100%;
-  height: 200px;
+  height: 45vh;
   object-fit: cover;
   border-radius: 4px;
 }
@@ -122,7 +138,7 @@ main.container {
 .carousel-viewport {
   position: relative;
   width: 100%;
-  max-height: 60vh;
+  height: var(--slideshow-image-height);
   overflow: hidden;
   border-radius: 4px 4px 0 0;
   background: #eceff1;
@@ -130,7 +146,7 @@ main.container {
 
 .carousel-viewport img {
   width: 100%;
-  max-height: 60vh;
+  height: 100%;
   object-fit: cover;
   display: block;
 }
